@@ -2,12 +2,9 @@ import numpy as np
 from scipy import integrate
 from scipy import interpolate
 import matplotlib.pyplot as plt
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-## for Palatino and other serif fonts use:
-#rc('font',**{'family':'serif','serif':['Palatino']})
-rc('text', usetex=True)
 import tqdm
+import snsplot
+snsplot.set()
 
 t_span = np.linspace(0.0, 1.0, 1000)
 T = t_span[-1] - t_span[0]

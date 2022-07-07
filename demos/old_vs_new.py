@@ -1,10 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
-
 from dmp import dmp_cartesian as dmp
+import snsplot
+snsplot.set()
 
 # This script tests both the original DMP formulation from Ijspeert et al. 2002
 # and the new formulation from Park et al. 2008
@@ -61,7 +59,7 @@ plt.figure()
 plt.plot(x, y, 'b', label='learned traj.')
 plt.plot(mp_new_under[:, 0], mp_new_under[:, 1], '--g', label='Park et al.')
 plt.plot(mp_old_under[:, 0], mp_old_under[:, 1], ':k', label='Ijspeert et al.')
-plt.plot([-1, np.pi + 1], [0, 0], 'k', color = 'gray', label=r'$x_2 = 0$')
+plt.plot([-1, np.pi + 1], [0, 0], color='gray', label=r'$x_2 = 0$')
 plt.legend(loc='best')
 plt.plot(gamma[0][0], gamma[0][1], '.k', markersize=10)
 plt.plot(g_under[0], g_under[1], '*k', markersize=10)

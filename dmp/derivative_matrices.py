@@ -51,7 +51,7 @@ def compute_D2(n, dt):
     d2_c = - 2. * np.ones([n])
     d2_c[0] = 2.
     d2_c[-1] = 2.
-    D2 = sparse.diags(np.array([d2_p, d2_c, d2_m]), [1, 0, -1]).toarray()
+    D2 = sparse.diags([d2_p, d2_c, d2_m], [1, 0, -1]).toarray()
     D2[0, 2] = 4.
     D2[0, 3] = -1.
     D2[-1, -3] = 4.

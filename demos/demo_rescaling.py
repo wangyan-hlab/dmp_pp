@@ -1,12 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-## for Palatino and other serif fonts use:
-#rc('font',**{'family':'serif','serif':['Palatino']})
-rc('text', usetex=True)
-
 from dmp import dmp_cartesian as dmp
+import snsplot
+snsplot.set()
 
 # Creation of the trajectory
 t_steps = 10 ** 3

@@ -1,4 +1,5 @@
 __pycache__/
+.idea
 dmp.egg-info/dependency_links.txt
 dmp.egg-info/PKG-INFO
 dmp.egg-info/requires.txt
