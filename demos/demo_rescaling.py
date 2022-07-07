@@ -25,10 +25,10 @@ ms = 10 # marker size
 # Initialization and lLearning the forcing term
 myK = 1000.0
 alpha_s = 4.0
-dmp_rescaling = dmp.DMPs_cartesian (n_dmps = 2, n_bfs = 50, K = myK, rescale = 'rotodilatation', alpha_s = alpha_s, tol = 0.1)
-dmp_classical = dmp.DMPs_cartesian (n_dmps = 2, n_bfs = 50, K = myK, rescale = None, alpha_s = alpha_s, tol = 0.1)
-dmp_rescaling.imitate_path (x_des = x_des.transpose(), t_des = t_des)
-dmp_classical.imitate_path (x_des = x_des.transpose(), t_des = t_des)
+dmp_rescaling = dmp.DMPs_cartesian(n_dmps=2, n_bfs=50, K=myK, rescale='rotodilatation', alpha_s=alpha_s, tol=0.1)
+dmp_classical = dmp.DMPs_cartesian(n_dmps=2, n_bfs=50, K=myK, rescale=None, alpha_s=alpha_s, tol=0.1)
+dmp_rescaling.imitate_path(x_des=x_des.transpose(), t_des=t_des)
+dmp_classical.imitate_path(x_des=x_des.transpose(), t_des=t_des)
 x_learned, _, _, t_learned = dmp_classical.rollout()
 
 # Only rotation of the reference frame
@@ -76,24 +76,24 @@ ddx_track_classical = np.zeros((0, dmp_classical.n_dmps))
 x_track_rescaling = np.zeros((0, dmp_rescaling.n_dmps))
 dx_track_rescaling = np.zeros((0, dmp_rescaling.n_dmps))
 ddx_track_rescaling = np.zeros((0, dmp_rescaling.n_dmps))
-x_track_classical = np.append(x_track_classical, [dmp_classical.x_0], axis = 0)
-dx_track_classical = np.append(dx_track_classical, [0.0 * dmp_classical.x_0], axis = 0)
-dx_track_classical = np.append(ddx_track_classical, [0.0 * dmp_classical.x_0], axis = 0)
-x_track_rescaling = np.append(x_track_rescaling, [dmp_rescaling.x_0], axis = 0)
-dx_track_rescaling = np.append(dx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis = 0)
-dx_track_rescaling = np.append(ddx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis = 0)
+x_track_classical = np.append(x_track_classical, [dmp_classical.x_0], axis=0)
+dx_track_classical = np.append(dx_track_classical, [0.0 * dmp_classical.x_0], axis=0)
+dx_track_classical = np.append(ddx_track_classical, [0.0 * dmp_classical.x_0], axis=0)
+x_track_rescaling = np.append(x_track_rescaling, [dmp_rescaling.x_0], axis=0)
+dx_track_rescaling = np.append(dx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis=0)
+dx_track_rescaling = np.append(ddx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis=0)
 # Rollout of classical DMP
 flag = False
 t = 0
-while (not flag):
+while not flag:
   # Run and record timestep
-  x_track_s, dx_track_s, ddx_track_s = dmp_classical.step(tau = 1)
+  x_track_s, dx_track_s, ddx_track_s = dmp_classical.step(tau=1)
   x_track_classical = np.append(x_track_classical, [x_track_s], axis=0)
-  dx_track_classical = np.append(dx_track_classical, [dx_track_s],axis=0)
-  ddx_track_classical = np.append(ddx_track_classical, [ddx_track_s],axis=0)
-  if (t < dmp_classical.cs.timesteps / 2):
+  dx_track_classical = np.append(dx_track_classical, [dx_track_s], axis=0)
+  ddx_track_classical = np.append(ddx_track_classical, [ddx_track_s], axis=0)
+  if t < dmp_classical.cs.timesteps / 2:
     dmp_classical.x_goal = np.dot(R, dmp_classical.x_goal)
-  goal_track = np.append(goal_track, [dmp_classical.x_goal], axis = 0)
+  goal_track = np.append(goal_track, [dmp_classical.x_goal], axis=0)
   t += 1
   err_abs = np.linalg.norm(x_track_s - dmp_classical.x_goal)
   err_rel = err_abs / (np.linalg.norm(dmp_classical.x_goal - dmp_classical.x_0) + 1e-14)
@@ -102,13 +102,13 @@ t_track_classical = np.linspace(0, dmp_classical.cs.dt * t, t+1)
 # Rollout of DMP++
 flag = False
 t = 0
-while (not flag):
+while not flag:
   # Run and record timestep
-  x_track_s, dx_track_s, ddx_track_s = dmp_rescaling.step(tau = 1)
+  x_track_s, dx_track_s, ddx_track_s = dmp_rescaling.step(tau=1)
   x_track_rescaling = np.append(x_track_rescaling, [x_track_s], axis=0)
-  dx_track_rescaling = np.append(dx_track_rescaling, [dx_track_s],axis=0)
-  ddx_track_rescaling = np.append(ddx_track_rescaling, [ddx_track_s],axis=0)
-  if (t < dmp_classical.cs.timesteps / 2):
+  dx_track_rescaling = np.append(dx_track_rescaling, [dx_track_s], axis=0)
+  ddx_track_rescaling = np.append(ddx_track_rescaling, [ddx_track_s], axis=0)
+  if t < dmp_classical.cs.timesteps / 2:
     dmp_rescaling.x_goal = np.dot(R, dmp_rescaling.x_goal)
   t += 1
   err_abs = np.linalg.norm(x_track_s - dmp_rescaling.x_goal)
@@ -123,10 +123,10 @@ t_track_rescaling = np.linspace(0, dmp_rescaling.cs.dt * t, t+1)
 # Initialization and lLearning the forcing term
 myK = 1000.0
 alpha_s = 1.0
-dmp_rescaling = dmp.DMPs_cartesian (n_dmps = 2, n_bfs = 50, K = myK, rescale = 'rotodilatation', alpha_s = alpha_s, tol = 0.1)
-dmp_classical = dmp.DMPs_cartesian (n_dmps = 2, n_bfs = 50, K = myK, rescale = None, alpha_s = alpha_s, tol = 0.1)
-dmp_rescaling.imitate_path (x_des = x_des.transpose(), t_des = t_des)
-dmp_classical.imitate_path (x_des = x_des.transpose(), t_des = t_des)
+dmp_rescaling = dmp.DMPs_cartesian (n_dmps=2, n_bfs=50, K=myK, rescale='rotodilatation', alpha_s=alpha_s, tol=0.1)
+dmp_classical = dmp.DMPs_cartesian (n_dmps=2, n_bfs=50, K=myK, rescale=None, alpha_s=alpha_s, tol=0.1)
+dmp_rescaling.imitate_path(x_des = x_des.transpose(), t_des = t_des)
+dmp_classical.imitate_path(x_des = x_des.transpose(), t_des = t_des)
 x_learned, _, _,_ = dmp_classical.rollout()
 
 # Only rotation of the reference frame
@@ -174,24 +174,24 @@ ddx_track_classical = np.zeros((0, dmp_classical.n_dmps))
 x_track_rescaling_newalpha = np.zeros((0, dmp_rescaling.n_dmps))
 dx_track_rescaling = np.zeros((0, dmp_rescaling.n_dmps))
 ddx_track_rescaling = np.zeros((0, dmp_rescaling.n_dmps))
-x_track_classical_newalpha = np.append(x_track_classical_newalpha, [dmp_classical.x_0], axis = 0)
-dx_track_classical = np.append(dx_track_classical, [0.0 * dmp_classical.x_0], axis = 0)
-dx_track_classical = np.append(ddx_track_classical, [0.0 * dmp_classical.x_0], axis = 0)
-x_track_rescaling_newalpha = np.append(x_track_rescaling_newalpha, [dmp_rescaling.x_0], axis = 0)
-dx_track_rescaling = np.append(dx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis = 0)
-dx_track_rescaling = np.append(ddx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis = 0)
+x_track_classical_newalpha = np.append(x_track_classical_newalpha, [dmp_classical.x_0], axis=0)
+dx_track_classical = np.append(dx_track_classical, [0.0 * dmp_classical.x_0], axis=0)
+dx_track_classical = np.append(ddx_track_classical, [0.0 * dmp_classical.x_0], axis=0)
+x_track_rescaling_newalpha = np.append(x_track_rescaling_newalpha, [dmp_rescaling.x_0], axis=0)
+dx_track_rescaling = np.append(dx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis=0)
+dx_track_rescaling = np.append(ddx_track_rescaling, [0.0 * dmp_rescaling.x_0], axis=0)
 # Rollout of classical DMP
 flag = False
 t = 0
 while (not flag):
   # Run and record timestep
-  x_track_s, dx_track_s, ddx_track_s = dmp_classical.step(tau = 1)
+  x_track_s, dx_track_s, ddx_track_s = dmp_classical.step(tau=1)
   x_track_classical_newalpha = np.append(x_track_classical_newalpha, [x_track_s], axis=0)
   dx_track_classical = np.append(dx_track_classical, [dx_track_s],axis=0)
   ddx_track_classical = np.append(ddx_track_classical, [ddx_track_s],axis=0)
   if (t < dmp_classical.cs.timesteps / 2):
     dmp_classical.x_goal = np.dot(R, dmp_classical.x_goal)
-  goal_track = np.append(goal_track, [dmp_classical.x_goal], axis = 0)
+  goal_track = np.append(goal_track, [dmp_classical.x_goal], axis=0)
   t += 1
   err_abs = np.linalg.norm(x_track_s - dmp_classical.x_goal)
   err_rel = err_abs / (np.linalg.norm(dmp_classical.x_goal - dmp_classical.x_0) + 1e-14)
@@ -200,13 +200,13 @@ t_track_classical = np.linspace(0, dmp_classical.cs.dt * t, t+1)
 # Rollout of DMP++
 flag = False
 t = 0
-while (not flag):
+while not flag:
   # Run and record timestep
-  x_track_s, dx_track_s, ddx_track_s = dmp_rescaling.step(tau = 1)
+  x_track_s, dx_track_s, ddx_track_s = dmp_rescaling.step(tau=1)
   x_track_rescaling_newalpha = np.append(x_track_rescaling_newalpha, [x_track_s], axis=0)
-  dx_track_rescaling = np.append(dx_track_rescaling, [dx_track_s],axis=0)
-  ddx_track_rescaling = np.append(ddx_track_rescaling, [ddx_track_s],axis=0)
-  if (t < dmp_classical.cs.timesteps / 2):
+  dx_track_rescaling = np.append(dx_track_rescaling, [dx_track_s], axis=0)
+  ddx_track_rescaling = np.append(ddx_track_rescaling, [ddx_track_s], axis=0)
+  if t < dmp_classical.cs.timesteps / 2:
     dmp_rescaling.x_goal = np.dot(R, dmp_rescaling.x_goal)
   t += 1
   err_abs = np.linalg.norm(x_track_s - dmp_rescaling.x_goal)
@@ -221,10 +221,10 @@ t_track_rescaling = np.linspace(0, dmp_rescaling.cs.dt * t, t+1)
 plt.figure(1)
 plt.plot(x_learned[:, 0], x_learned[:, 1], '--b')
 plt.plot(x_rot_classical[:, 0], x_rot_classical[:, 1], '-.g')
-plt.plot(x_rot_classical_newalpha[:, 0], x_rot_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color = 'purple')
+plt.plot(x_rot_classical_newalpha[:, 0], x_rot_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color='purple')
 plt.plot(x_rot_rescaling[:, 0], x_rot_rescaling[:, 1], '-r')
 plt.plot(x_rot_rescaling_newalpha[:, 0], x_rot_rescaling_newalpha[:, 1], linestyle='dotted', color='orange')
-plt.plot(new_goal_rot[0], new_goal_rot[1], '*k', markersize = ms, label = r'New goal position')
+plt.plot(new_goal_rot[0], new_goal_rot[1], '*k', markersize=ms, label=r'New goal position')
 plt.plot(0, 0, '.k', markersize=ms)
 plt.xlabel(r'$ x_1 $', fontsize=14)
 plt.ylabel(r'$ x_2 $', fontsize=14)
@@ -233,10 +233,10 @@ plt.axis('equal')
 plt.figure(2)
 plt.plot(x_learned[:, 0], x_learned[:, 1], '--b')
 plt.plot(x_dilat_classical[:, 0], x_dilat_classical[:, 1], '-.g')
-plt.plot(x_dilat_classical_newalpha[:, 0], x_dilat_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color = 'purple')
+plt.plot(x_dilat_classical_newalpha[:, 0], x_dilat_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color='purple')
 plt.plot(x_dilat_rescaling[:, 0], x_dilat_rescaling[:, 1], '-r')
 plt.plot(x_dilat_rescaling_newalpha[:, 0], x_dilat_rescaling_newalpha[:, 1], linestyle='dotted', color='orange')
-plt.plot(new_goal_dilat[0], new_goal_dilat[1], '*k', markersize = ms, label = r'New goal position')
+plt.plot(new_goal_dilat[0], new_goal_dilat[1], '*k', markersize=ms, label=r'New goal position')
 plt.plot(0, 0, '.k', markersize=ms)
 plt.xlabel(r'$ x_1 $', fontsize=14)
 plt.ylabel(r'$ x_2 $', fontsize=14)
@@ -245,10 +245,10 @@ plt.axis('equal')
 plt.figure(3)
 plt.plot(x_learned[:, 0], x_learned[:, 1], '--b')
 plt.plot(x_shrink_classical[:, 0], x_shrink_classical[:, 1], '-.g')
-plt.plot(x_shrink_classical_newalpha[:, 0], x_shrink_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color = 'purple')
+plt.plot(x_shrink_classical_newalpha[:, 0], x_shrink_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color='purple')
 plt.plot(x_shrink_rescaling[:, 0], x_shrink_rescaling[:, 1], '-r')
 plt.plot(x_shrink_rescaling_newalpha[:, 0], x_shrink_rescaling_newalpha[:, 1], linestyle='dotted', color='orange')
-plt.plot(new_goal_shrink[0], new_goal_shrink[1], '*k', markersize = ms, label = r'New goal position')
+plt.plot(new_goal_shrink[0], new_goal_shrink[1], '*k', markersize=ms, label=r'New goal position')
 plt.plot(0, 0, '.k', markersize=ms)
 plt.xlabel(r'$ x_1 $', fontsize=14)
 plt.ylabel(r'$ x_2 $', fontsize=14)
@@ -257,13 +257,13 @@ plt.axis('equal')
 plt.figure(4)
 plt.plot(x_learned[:, 0], x_learned[:, 1], '--b')
 plt.plot(x_track_classical[:, 0], x_track_classical[:, 1], '-.g')
-plt.plot(x_track_classical_newalpha[:, 0], x_track_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color = 'purple')
+plt.plot(x_track_classical_newalpha[:, 0], x_track_classical_newalpha[:, 1], linestyle=(0, (3, 2, 1, 2, 1, 2, 1, 2)), color='purple')
 plt.plot(x_track_rescaling[:, 0], x_track_rescaling[:, 1], '-r')
 plt.plot(x_track_rescaling_newalpha[:, 0], x_track_rescaling_newalpha[:, 1], linestyle='dotted', color='orange')
 goal_range = list((np.linspace(0, len(goal_track[:, 0]) / 2, 50)).astype(int))
 goal_range = goal_range[:-1]
 plt.plot(goal_track[goal_range, 0], goal_track[goal_range, 1], '*k', markersize=(ms // 2))
-plt.plot(goal_track[-1][0], goal_track[-1][1], '*k', markersize = ms, label = r'New goal position')
+plt.plot(goal_track[-1][0], goal_track[-1][1], '*k', markersize=ms, label=r'New goal position')
 plt.plot(0, 0, '.k', markersize=ms)
 plt.xlabel(r'$ x_1 $', fontsize=14)
 plt.ylabel(r'$ x_2 $', fontsize=14)

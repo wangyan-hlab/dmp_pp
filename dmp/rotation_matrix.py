@@ -25,12 +25,12 @@ def fnAR(x):
     n = np.size(x)
     R = np.eye(n)
     step = 1
-    while (step < n):
+    while step < n:
         A = np.eye(n)
         it = 0
-        while(it < n - step):
+        while it < n - step:
             r2 = x[it] * x[it] + x[it + step] * x[it + step]
-            if (r2 > 0):
+            if r2 > 0:
                 r = np.sqrt(r2)
                 pcos = x[it] / r
                 psin = - x[it + step] / r
@@ -54,7 +54,7 @@ def roto_dilatation(x0, x1):
     # Write the inputs as 1D array
     x0 = np.ndarray.flatten(x0)
     x1 = np.ndarray.flatten(x1)
-    if (np.size(x0) != np.size(x1)):
+    if np.size(x0) != np.size(x1):
         raise ValueError(
             'The two vectors must have the same number of components')
 
